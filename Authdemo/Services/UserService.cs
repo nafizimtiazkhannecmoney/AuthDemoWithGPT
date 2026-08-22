@@ -23,5 +23,24 @@ namespace Authdemo.Services
                 Department = user.Department
             }).ToList();
         }
+
+        public async Task<UserResponseDto> GetUserByIdAsync(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserResponseDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Role = user.Role,
+                Department = user.Department
+            };
+        }
     }
 }

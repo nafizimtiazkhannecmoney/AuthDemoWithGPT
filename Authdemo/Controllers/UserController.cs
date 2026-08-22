@@ -20,5 +20,21 @@ namespace Authdemo.Controllers
             var users = await _userService.GetAllUsersAsync();
             return Ok(users);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _userService.GetUserByIdAsync(id);
+
+            if(user == null)
+            {
+                return NotFound(new
+                {
+                    Message = $"User {id} Not Found"
+                });
+            }
+
+            return Ok(user);
+        }
     }
 }
