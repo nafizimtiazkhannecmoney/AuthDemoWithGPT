@@ -1,0 +1,22 @@
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+.vs/
+
+# Logs and temp
+*.log
+*.tmp
+*.cache
+
+# Publish output
+publish/
+
+# Node.js dependencies (if using frontend tooling)
+node_modules/
+
+# NuGet packages (old style, not needed with modern SDK restore)
+packages/
