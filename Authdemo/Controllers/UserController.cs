@@ -36,5 +36,35 @@ namespace Authdemo.Controllers
 
             return Ok(user);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, UpdateUserRequest request)
+        {
+            var success = await _userService.UpdateUserAsync(id, request);
+
+            if (!success)
+            {
+                return NotFound(new
+                {
+                    Message = $"User {id} Not Found"
+                });
+            }
+            return Ok("User Updated Successfully");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var success = await _userService.DeleteUserAsync(id);
+
+            if (!success)
+            {
+                return NotFound(new
+                {
+                    Message = $"User {id} not found"
+                });
+            }
+            return Ok("User Deleted Successfully");
+        }
     }
 }

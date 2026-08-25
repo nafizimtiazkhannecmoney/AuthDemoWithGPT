@@ -13,6 +13,7 @@
         public string Role { get; set; } = string.Empty;
 
         public bool IsActive { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public string Department { get; set; } = string.Empty;
         public ICollection<RefreshToken> RefreshTokens { get; set; }    = new List<RefreshToken>();

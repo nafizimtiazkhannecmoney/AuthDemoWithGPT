@@ -148,13 +148,17 @@ namespace Authdemo
 // Integrate Mailtrap for email sending
 // Install-Package MailKit
 
- //SHOULDER
- //Lateral Raise: 2.5, 1.25 - 1.25, 2.5 = 7.5
- //Rear Delt Fly: 2.5, 1.25 - 1.25, 2.5 = 7.5
- //Arnold Press:  2.5, 1.25 - 1.25, 2.5 = 7.5
+// Add-Migration AddUserIsDeleted
+// Update-Database
 
- //TRICEPS
- //Overhead Extension: 1.25, 5.00 - 5.00, 1.25 = 12.5
- //Skull Crushers:     1.25, 5.00 - 5.00, 1.25 = 12.5
- //Chest Press:        1.25, 5.00 - 5.00, 1.25 = 12.5
- //Kick Backs:         1.25, 1.25 - 1.25, 1.25 = 5.0
+
+//SHOULDER
+//Lateral Raise: 2.5, 1.25 - 1.25, 2.5 = 7.5
+//Rear Delt Fly: 2.5, 1.25 - 1.25, 2.5 = 7.5
+//Arnold Press:  2.5, 1.25 - 1.25, 2.5 = 7.5
+
+//TRICEPS
+//Overhead Extension: 1.25, 5.00 - 5.00, 1.25 = 12.5
+//Skull Crushers:     1.25, 5.00 - 5.00, 1.25 = 12.5
+//Chest Press:        1.25, 5.00 - 5.00, 1.25 = 12.5
+//Kick Backs:         1.25, 1.25 - 1.25, 1.25 = 5.0

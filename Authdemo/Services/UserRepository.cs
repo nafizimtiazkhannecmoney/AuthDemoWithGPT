@@ -26,6 +26,11 @@ namespace Authdemo.Services
         {
             return await _context.Users
                 .FirstOrDefaultAsync(x => x.Username == username);
+
+        //    return await _context.Users
+        //      .FirstOrDefaultAsync(u =>
+        //      u.Username == username &&
+        //      !u.IsDeleted);
         }
         public Task CreateAsync(User user)
         {
@@ -117,7 +122,7 @@ namespace Authdemo.Services
 
         public async Task<List<User>> GetAllUsersAsync()
         {
-           return await _context.Users.ToListAsync();
+            return await _context.Users.Where(u => !u.IsDeleted).ToListAsync();
         }
     }
 }

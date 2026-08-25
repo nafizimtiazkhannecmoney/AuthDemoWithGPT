@@ -10,6 +10,7 @@ namespace Authdemo.Services
         {
             _userRepository = userRepository;
         }
+
         public async Task<List<UserResponseDto>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllUsersAsync();
@@ -41,6 +42,36 @@ namespace Authdemo.Services
                 Role = user.Role,
                 Department = user.Department
             };
+        }
+
+        public async Task<bool> UpdateUserAsync(int id, UpdateUserRequest request)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if(user == null)
+            {
+                return false;
+            }
+
+            user.Username = request.Username;
+            user.Email = request.Email;
+            user.Department = request.Department;
+
+            await _userRepository.UpdateUserAsync(user);
+            return true;
+        }
+        public async Task<bool> DeleteUserAsync(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if(user == null || user.IsDeleted)
+            {
+                return false;
+            }
+
+            user.IsDeleted = true;
+            await _userRepository.UpdateUserAsync(user);
+            return true;
         }
     }
 }

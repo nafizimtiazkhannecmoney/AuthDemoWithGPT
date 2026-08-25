@@ -6,5 +6,7 @@ namespace Authdemo.Services
     {
         Task<List<UserResponseDto>> GetAllUsersAsync();
         Task<UserResponseDto> GetUserByIdAsync(int id);
+        Task<bool> UpdateUserAsync(int id, UpdateUserRequest request);
+        Task<bool> DeleteUserAsync(int id);
     }
 }
