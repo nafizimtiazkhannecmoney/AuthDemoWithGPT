@@ -71,6 +71,8 @@ namespace Authdemo.Services
 
             user.IsDeleted = true;
             await _userRepository.UpdateUserAsync(user);
+            await _userRepository.RevokeAllRefreshTokensAsync(id);
+
             return true;
         }
     }

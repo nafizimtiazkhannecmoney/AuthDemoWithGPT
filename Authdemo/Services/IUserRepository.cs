@@ -33,5 +33,6 @@ namespace Authdemo.Services
         Task UpdatePasswordResetTokenAsync(PasswordResetToken token);
         Task UpdateUserAsync(User user);
         Task<List<User>> GetAllUsersAsync();
+        Task RevokeAllRefreshTokensAsync(int userId);
     }
 }

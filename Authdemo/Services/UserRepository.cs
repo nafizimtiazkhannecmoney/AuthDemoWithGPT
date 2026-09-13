@@ -25,7 +25,7 @@ namespace Authdemo.Services
         public async Task<User?> GetByUsernameAsync(string username)
         {
             return await _context.Users
-                .FirstOrDefaultAsync(x => x.Username == username);
+                .FirstOrDefaultAsync(x => x.Username == username && !x.IsDeleted);
 
         //    return await _context.Users
         //      .FirstOrDefaultAsync(u =>
@@ -123,6 +123,20 @@ namespace Authdemo.Services
         public async Task<List<User>> GetAllUsersAsync()
         {
             return await _context.Users.Where(u => !u.IsDeleted).ToListAsync();
+        }
+
+        public async Task RevokeAllRefreshTokensAsync(int userId)
+        {
+            var refreshTokens = await _context.RefreshTokens
+                .Where(rt => rt.UserId == userId && !rt.IsRevoked)
+                .ToListAsync();
+
+            foreach (var token in refreshTokens)
+            {
+                token.IsRevoked = true;
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

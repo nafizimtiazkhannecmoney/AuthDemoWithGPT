@@ -129,8 +129,6 @@ namespace Authdemo.Services
             };
         }
 
-        
-
         //public async Task<LoginResponse> RefreshTokenAsync(RefreshTokenRequest request)
         //{
         //    var refreshTokenEntity = await _userRepository.GetRefreshTokenAsync(request.RefreshToken);
