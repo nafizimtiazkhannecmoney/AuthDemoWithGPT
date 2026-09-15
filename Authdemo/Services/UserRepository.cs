@@ -25,12 +25,10 @@ namespace Authdemo.Services
         public async Task<User?> GetByUsernameAsync(string username)
         {
             return await _context.Users
-                .FirstOrDefaultAsync(x => x.Username == username && !x.IsDeleted);
-
-        //    return await _context.Users
-        //      .FirstOrDefaultAsync(u =>
-        //      u.Username == username &&
-        //      !u.IsDeleted);
+                .FirstOrDefaultAsync(x => 
+                x.Username == username && 
+                !x.IsDeleted &&
+                x.IsActive);
         }
         public Task CreateAsync(User user)
         {
@@ -92,7 +90,8 @@ namespace Authdemo.Services
         public async Task<User?> GetByEmailAsync(string email)
         {
             return await _context.Users
-                .FirstOrDefaultAsync(x => x.Email == email);
+                .FirstOrDefaultAsync(x => x.Email == email &&
+                !x.IsDeleted);
         }
 
         public async Task AddPasswordResetTokenAsync(PasswordResetToken token)

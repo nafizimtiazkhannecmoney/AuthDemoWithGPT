@@ -321,10 +321,11 @@ namespace Authdemo.Services
 
             var user = resetToken.User;
             
-            if(user == null)
+            if(user == null || user.IsDeleted)
             {
                 return false;
             }
+
 
 
             user.PasswordHash = _passwordHasher.HashPassword(user, request.NewPassword);

@@ -1,4 +1,5 @@
 
+using System.Security.Claims;
 using System.Text;
 using Authdemo.Data;
 using Authdemo.Entities;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 namespace Authdemo
 {
@@ -16,7 +18,22 @@ namespace Authdemo
     {
         public static void Main(string[] args)
         {
+            // Bootstrap logger early (so startup messages are captured)
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .Build())
+                .Enrich.FromLogContext()
+                .CreateLogger();
+
+
+            Log.Information("Application Starting...");
+
             var builder = WebApplication.CreateBuilder(args);
+
+
+            //*** This is the missing piece
+            builder.Host.UseSerilog();   // < replaces the default logging providers
 
             // Add services to the container.
             builder.Services.AddControllers();
@@ -87,6 +104,73 @@ namespace Authdemo
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
                     };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async context =>
+                        {
+                            var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserRepository>();
+
+                            var userClaim = context.Principal?.FindFirst(ClaimTypes.NameIdentifier);
+
+                            if (userClaim == null || !int.TryParse(userClaim.Value, out var userId))
+                            {
+                                //context.Fail("Invalid user identity.");
+                                context.Fail("DEBUG: Invalid user identity.");
+                                Console.WriteLine("DEBUG: Invalid user identity.");
+                                return;
+                            }
+
+                            var user = await userRepository.GetByIdAsync(userId);
+
+                            if (user == null)
+                            {
+                                //context.Fail("User not found.");
+                                context.Fail("DEBUG: User not found.");
+                                Console.WriteLine("DEBUG: User not found.");
+                                Log.Information("User not found.");
+                                return;
+                            }
+
+                            var tokenVersionClaim = 
+                                context.Principal?.FindFirst("TokenVersion");
+
+                            if (tokenVersionClaim == null || !int.TryParse(tokenVersionClaim.Value, out var tokenVersion))
+                            {
+                                //context.Fail("Invalid token version.");
+                                context.Fail("DEBUG: Invalid token version.");
+                                Console.WriteLine("DEBUG: Invalid token version.");
+                                Log.Information("Invalid token version.");
+                                return;
+                            }
+
+                            if (tokenVersion != user.TokenVersion)
+                            {
+                                //context.Fail("Token is no longer valid.");
+                                context.Fail("DEBUG: Token version mismatch.");
+                                Console.WriteLine("DEBUG: Token version mismatch.");
+                                Log.Information("Token version mismatch.");
+                                return;
+                            }
+
+                            if (!user.IsActive)
+                            {
+                                //context.Fail("User account is inactive.");
+                                context.Fail("DEBUG: User account inactive.");
+                                Console.WriteLine("DEBUG: User account inactive.");
+                                Log.Information("User account inactive.");
+                                return;
+                            }
+
+                            if (user.IsDeleted)
+                            {
+                                //context.Fail("User account has been deleted.");
+                                context.Fail("DEBUG: User account deleted.");
+                                Console.WriteLine("DEBUG:  User account deleted.");
+                                Log.Information("User account deleted.");
+                                return;
+                            }
+                        }
+                    };
                 });
 
             // Add Authorization
@@ -150,6 +234,20 @@ namespace Authdemo
 
 // Add-Migration AddUserIsDeleted
 // Update-Database
+
+// Add-Migration AddUserTokenVersion
+// Update-Database
+
+
+
+
+
+
+
+
+
+
+
 
 
 //SHOULDER

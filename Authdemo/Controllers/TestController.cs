@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Authdemo.Controllers
 {
@@ -9,6 +10,13 @@ namespace Authdemo.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
+        private readonly ILogger<TestController> _logger;
+
+        public TestController(ILogger<TestController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpGet("public")]
         public IActionResult Public()
         {
@@ -19,6 +27,7 @@ namespace Authdemo.Controllers
         [HttpGet("private")]
         public IActionResult Private()
         {
+            _logger.LogInformation("Accessing private endpoint by user: {User}", User.Identity?.Name);
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var username = User.FindFirst(ClaimTypes.Name)?.Value;
             var role = User.FindFirst(ClaimTypes.Role)?.Value;

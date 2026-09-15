@@ -24,7 +24,8 @@ namespace Authdemo.Services
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role),
                 new Claim("Department", user.Department),
-                new Claim("IsActive", user.IsActive.ToString())
+                new Claim("IsActive", user.IsActive.ToString()),
+                new Claim("TokenVersion", user.TokenVersion.ToString())
                 //new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                 //new Claim("UserId", user.Id.ToString())
                 //new Claim(ClaimTypes.ac, user.Role)
