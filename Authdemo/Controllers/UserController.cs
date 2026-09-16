@@ -66,5 +66,39 @@ namespace Authdemo.Controllers
             }
             return Ok("User Deleted Successfully");
         }
+
+        [HttpPut("deactivate/{id}")]
+        public async Task<IActionResult> DeactivateUser(int id) 
+        {
+            var result = await _userService.DeactivateUserAsync(id);
+
+            if (!result)
+            {
+                return NotFound(new
+                    {
+                        Message = $"User {id} not found or already deactivated"
+                    }
+                );
+            }
+
+            return Ok("User Deactivated Successfully");
+        }
+
+        [HttpPut("activate/{id}")]
+        public async Task<IActionResult> ActivateUser(int id)
+        {
+            var result = await _userService.ActivateUserAsync(id);
+
+            if (!result)
+            {
+                return NotFound(new
+                    {
+                        Message = $"User {id} not found or already active"
+                    }
+                );
+            }
+
+            return Ok($"User {id} activated successfully");
+        }
     }
 }

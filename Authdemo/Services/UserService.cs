@@ -70,9 +70,44 @@ namespace Authdemo.Services
             }
 
             user.IsDeleted = true;
+            user.TokenVersion++; // Increment the token version to invalidate existing tokens
             await _userRepository.UpdateUserAsync(user);
             await _userRepository.RevokeAllRefreshTokensAsync(id);
 
+            return true;
+        }
+
+        public async Task<bool> DeactivateUserAsync(int id) 
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if(user == null || user.IsDeleted || !user.IsActive)
+            {
+                return false;
+            }
+
+            user.IsActive = false;
+            user.TokenVersion++; // Increment the token version to invalidate existing tokens
+
+            await _userRepository.UpdateUserAsync(user);
+            await _userRepository.RevokeAllRefreshTokensAsync(user.Id);
+
+            return true;
+        }
+
+        public async Task<bool> ActivateUserAsync(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if (user == null || user.IsDeleted || user.IsActive)
+            {
+                return false;
+            }
+
+            user.IsActive = true;
+            user.TokenVersion++;
+
+            await _userRepository.UpdateUserAsync(user);
             return true;
         }
     }

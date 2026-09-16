@@ -8,5 +8,8 @@ namespace Authdemo.Services
         Task<UserResponseDto> GetUserByIdAsync(int id);
         Task<bool> UpdateUserAsync(int id, UpdateUserRequest request);
         Task<bool> DeleteUserAsync(int id);
+        Task<bool> DeactivateUserAsync(int id);
+        Task<bool> ActivateUserAsync(int id);
+
     }
 }

@@ -121,7 +121,8 @@ namespace Authdemo.Services
 
         public async Task<List<User>> GetAllUsersAsync()
         {
-            return await _context.Users.Where(u => !u.IsDeleted).ToListAsync();
+            //return await _context.Users.Where(u => !u.IsDeleted).ToListAsync(); // Gets all Users Along with Deleted Ones.
+            return await _context.Users.ToListAsync();
         }
 
         public async Task RevokeAllRefreshTokensAsync(int userId)
