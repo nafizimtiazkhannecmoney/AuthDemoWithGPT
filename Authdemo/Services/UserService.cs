@@ -21,7 +21,9 @@ namespace Authdemo.Services
                 Username = user.Username,
                 Email = user.Email,
                 Role = user.Role,
-                Department = user.Department
+                Department = user.Department,
+                IsActive = user.IsActive,
+                IsDeleted = user.IsDeleted
             }).ToList();
         }
 
@@ -40,7 +42,9 @@ namespace Authdemo.Services
                 Username = user.Username,
                 Email = user.Email,
                 Role = user.Role,
-                Department = user.Department
+                Department = user.Department,
+                IsActive = user.IsActive,
+                IsDeleted = user.IsDeleted
             };
         }
 
