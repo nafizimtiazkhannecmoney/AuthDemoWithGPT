@@ -138,5 +138,17 @@ namespace Authdemo.Services
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> UsernameExistsAsync(string username, int excludeUserId)
+        {
+            return await _context.Users
+                .AnyAsync(u => u.Username == username && u.Id != excludeUserId);
+        }
+
+        public async Task<bool> EmailExistsAsync(string email, int excludeUserId)
+        {
+            return await _context.Users.
+                AnyAsync(u => u.Email == email && u.Id != excludeUserId);
+        }
     }
 }

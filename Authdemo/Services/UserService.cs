@@ -1,4 +1,5 @@
-﻿using Authdemo.Models;
+﻿using Authdemo.Enums;
+using Authdemo.Models;
 
 namespace Authdemo.Services
 {
@@ -48,13 +49,28 @@ namespace Authdemo.Services
             };
         }
 
-        public async Task<bool> UpdateUserAsync(int id, UpdateUserRequest request)
+        public async Task<UpdateUserResult> UpdateUserAsync(int id, UpdateUserRequest request)
         {
             var user = await _userRepository.GetByIdAsync(id);
 
             if(user == null)
             {
-                return false;
+                return UpdateUserResult.NotFound;
+            }
+
+            if(user.IsDeleted)
+            {
+                return UpdateUserResult.Deleted;
+            }
+
+            if(await _userRepository.UsernameExistsAsync(request.Username, id))
+            {
+                return UpdateUserResult.UsernameExists;
+            }
+
+            if(await _userRepository.EmailExistsAsync(request.Email, id))
+            {
+                return UpdateUserResult.EmailExists;
             }
 
             user.Username = request.Username;
@@ -62,23 +78,29 @@ namespace Authdemo.Services
             user.Department = request.Department;
 
             await _userRepository.UpdateUserAsync(user);
-            return true;
+            return UpdateUserResult.Success;
         }
-        public async Task<bool> DeleteUserAsync(int id)
+        public async Task<DeleteUserResult> DeleteUserAsync(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
 
-            if(user == null || user.IsDeleted)
+            if(user == null)
             {
-                return false;
+                return DeleteUserResult.NotFound;
+            }
+
+            if (user.IsDeleted)
+            {
+                return DeleteUserResult.AlreadyDeleted;
             }
 
             user.IsDeleted = true;
             user.TokenVersion++; // Increment the token version to invalidate existing tokens
+
             await _userRepository.UpdateUserAsync(user);
             await _userRepository.RevokeAllRefreshTokensAsync(id);
 
-            return true;
+            return DeleteUserResult.Success;
         }
 
         public async Task<bool> DeactivateUserAsync(int id) 

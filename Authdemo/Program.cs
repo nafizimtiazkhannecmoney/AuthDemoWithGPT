@@ -238,7 +238,8 @@ namespace Authdemo
 // Add-Migration AddUserTokenVersion
 // Update-Database
 
-
+// Add-Migration AddUniqueUserIndexes
+// Update-Database
 
 
 

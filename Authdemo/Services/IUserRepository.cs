@@ -34,5 +34,8 @@ namespace Authdemo.Services
         Task UpdateUserAsync(User user);
         Task<List<User>> GetAllUsersAsync();
         Task RevokeAllRefreshTokensAsync(int userId);
+        Task<bool> UsernameExistsAsync(string username, int excludeUserId);
+        Task<bool> EmailExistsAsync(string email, int excludeUserId);
+
     }
 }

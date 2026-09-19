@@ -2,6 +2,7 @@
 using Authdemo.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Authdemo.Enums;
 
 namespace Authdemo.Controllers
 {
@@ -40,31 +41,65 @@ namespace Authdemo.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, UpdateUserRequest request)
         {
-            var success = await _userService.UpdateUserAsync(id, request);
+            var result = await _userService.UpdateUserAsync(id, request);
 
-            if (!success)
+            if (result == UpdateUserResult.NotFound)
             {
-                return NotFound(new
-                {
-                    Message = $"User {id} Not Found"
-                });
+                return NotFound("User not found.");
             }
-            return Ok("User Updated Successfully");
+
+            if (result == UpdateUserResult.Deleted)
+            {
+                return BadRequest("Deleted users cannot be updated.");
+            }
+
+            if (result == UpdateUserResult.UsernameExists)
+            {
+                return Conflict("Username already exists.");
+            }
+
+            if (result == UpdateUserResult.EmailExists)
+            {
+                return Conflict("Email already exists.");
+            }
+             
+            return Ok("User updated successfully.");
+
+            //if (!success)
+            //{
+            //    return NotFound(new
+            //    {
+            //        Message = $"User {id} Not Found"
+            //    });
+            //}
+            //return Ok("User Updated Successfully");
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var success = await _userService.DeleteUserAsync(id);
+            var result = await _userService.DeleteUserAsync(id);
 
-            if (!success)
+            if (result == DeleteUserResult.NotFound)
             {
-                return NotFound(new
-                {
-                    Message = $"User {id} not found"
-                });
+                return NotFound("User Not Found.");
             }
+
+            if (result == DeleteUserResult.AlreadyDeleted)
+            {
+                return BadRequest("User Is Already Deleted.");
+            }
+
             return Ok("User Deleted Successfully");
+
+            //if (!success)
+            //{
+            //    return NotFound(new
+            //    {
+            //        Message = $"User {id} not found"
+            //    });
+            //}
+            //return Ok("User Deleted Successfully");
         }
 
         [HttpPut("deactivate/{id}")]
