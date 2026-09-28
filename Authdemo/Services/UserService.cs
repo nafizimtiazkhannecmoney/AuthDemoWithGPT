@@ -1,15 +1,20 @@
-﻿using Authdemo.Enums;
+﻿using Authdemo.DTO;
+using Authdemo.Entities;
+using Authdemo.Enums;
 using Authdemo.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Authdemo.Services
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly PasswordHasher<User> _passwordHasher;
 
-        public UserService(IUserRepository userRepository)
+        public UserService(IUserRepository userRepository, PasswordHasher<User> passwordHasher)
         {
             _userRepository = userRepository;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<List<UserResponseDto>> GetAllUsersAsync()
@@ -53,22 +58,22 @@ namespace Authdemo.Services
         {
             var user = await _userRepository.GetByIdAsync(id);
 
-            if(user == null)
+            if (user == null)
             {
                 return UpdateUserResult.NotFound;
             }
 
-            if(user.IsDeleted)
+            if (user.IsDeleted)
             {
                 return UpdateUserResult.Deleted;
             }
 
-            if(await _userRepository.UsernameExistsAsync(request.Username, id))
+            if (await _userRepository.UsernameExistsAsync(request.Username, id))
             {
                 return UpdateUserResult.UsernameExists;
             }
 
-            if(await _userRepository.EmailExistsAsync(request.Email, id))
+            if (await _userRepository.EmailExistsAsync(request.Email, id))
             {
                 return UpdateUserResult.EmailExists;
             }
@@ -84,7 +89,7 @@ namespace Authdemo.Services
         {
             var user = await _userRepository.GetByIdAsync(id);
 
-            if(user == null)
+            if (user == null)
             {
                 return DeleteUserResult.NotFound;
             }
@@ -103,11 +108,11 @@ namespace Authdemo.Services
             return DeleteUserResult.Success;
         }
 
-        public async Task<bool> DeactivateUserAsync(int id) 
+        public async Task<bool> DeactivateUserAsync(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
 
-            if(user == null || user.IsDeleted || !user.IsActive)
+            if (user == null || user.IsDeleted || !user.IsActive)
             {
                 return false;
             }
@@ -135,6 +140,73 @@ namespace Authdemo.Services
 
             await _userRepository.UpdateUserAsync(user);
             return true;
+        }
+
+        public async Task<(CreateUserResult Result, UserResponseDto? User)> CreateUserAsync(CreateUserRequest request)
+        {
+            if (await _userRepository.UsernameExistsAsync(request.Username, 0))
+            {
+                return (CreateUserResult.UsernameExists, null);
+            }
+
+            if (await _userRepository.EmailExistsAsync(request.Email, 0))
+            {
+                return (CreateUserResult.EmailExists, null);
+            }
+
+            var user = new User
+            {
+                Username = request.Username,
+                Email = request.Email,
+                Role = request.Role,
+                Department = request.Department,
+                IsActive = true,
+                IsDeleted = false,
+                TokenVersion = 1
+            };
+
+            user.PasswordHash = _passwordHasher.HashPassword(user, request.Password);
+            await _userRepository.CreateUserAsync(user);
+
+            return (CreateUserResult.Success, new UserResponseDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                Role = user.Role,
+                Department = user.Department,
+                IsActive = user.IsActive,
+                IsDeleted = user.IsDeleted
+            });
+
+        }
+
+        public async Task<ChangeUserRoleResult> ChangeUserRoleAsync(int id, ChangeUserRoleRequest request)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+
+            if (user == null)
+            {
+                return ChangeUserRoleResult.NotFound;
+            }
+
+            if (user.IsDeleted)
+            {
+                return ChangeUserRoleResult.Deleted;
+            }
+
+            if (user.Role == request.Role)
+            {
+                return ChangeUserRoleResult.Success;
+            }
+
+            user.Role = request.Role;
+            user.TokenVersion++;
+
+            await _userRepository.UpdateUserAsync(user);
+            await _userRepository.RevokeAllRefreshTokensAsync(user.Id);
+
+            return ChangeUserRoleResult.Success;
         }
     }
 }

@@ -150,5 +150,11 @@ namespace Authdemo.Services
             return await _context.Users.
                 AnyAsync(u => u.Email == email && u.Id != excludeUserId);
         }
+
+        public async Task CreateUserAsync(User user)
+        {
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+        }
     }
 }

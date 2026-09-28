@@ -3,6 +3,7 @@ using Authdemo.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Authdemo.Enums;
+using Authdemo.DTO;
 
 namespace Authdemo.Controllers
 {
@@ -91,15 +92,6 @@ namespace Authdemo.Controllers
             }
 
             return Ok("User Deleted Successfully");
-
-            //if (!success)
-            //{
-            //    return NotFound(new
-            //    {
-            //        Message = $"User {id} not found"
-            //    });
-            //}
-            //return Ok("User Deleted Successfully");
         }
 
         [HttpPut("deactivate/{id}")]
@@ -134,6 +126,44 @@ namespace Authdemo.Controllers
             }
 
             return Ok($"User {id} activated successfully");
+        }
+
+        [HttpPost("CreateUser")]
+        public async Task<IActionResult> CreateUser(CreateUserRequest request)
+        {
+            
+            var result = await _userService.CreateUserAsync(request);
+
+
+            if (result.Result == CreateUserResult.UsernameExists)
+            {
+                return Conflict($"Username: {request.Username} already exists.");
+            }
+
+            if (result.Result == CreateUserResult.EmailExists)
+            {
+                return Conflict($"Email: {request.Email} already exists.");
+            }
+
+            return Ok(result.User);
+        }
+
+        [HttpPut("ChangeUserRole/{id}")]
+        public async Task<IActionResult> ChangeRole(int id, ChangeUserRoleRequest request)
+        {
+            var result = await _userService.ChangeUserRoleAsync(id, request);
+
+            if (result == ChangeUserRoleResult.NotFound)
+            {
+                return NotFound($"User {id} not found.");
+            }
+
+            if (result == ChangeUserRoleResult.Deleted)
+            {
+                return BadRequest($"User {id} Got Deleted, so cant change their Role");
+            }
+
+            return Ok($"User {id} role changed to {request.Role} successfully.");
         }
     }
 }

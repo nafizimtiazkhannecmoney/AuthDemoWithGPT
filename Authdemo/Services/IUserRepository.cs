@@ -37,5 +37,8 @@ namespace Authdemo.Services
         Task<bool> UsernameExistsAsync(string username, int excludeUserId);
         Task<bool> EmailExistsAsync(string email, int excludeUserId);
 
+        //Test
+        Task CreateUserAsync(User user);
+
     }
 }

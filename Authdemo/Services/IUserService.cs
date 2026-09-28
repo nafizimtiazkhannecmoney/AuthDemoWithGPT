@@ -1,5 +1,6 @@
 ﻿using Authdemo.Enums;
 using Authdemo.Models;
+using Authdemo.DTO;
 
 namespace Authdemo.Services
 {
@@ -11,6 +12,8 @@ namespace Authdemo.Services
         Task<DeleteUserResult> DeleteUserAsync(int id);
         Task<bool> DeactivateUserAsync(int id);
         Task<bool> ActivateUserAsync(int id);
-
+        //Task<UserResponseDto> CreateUserAsync(CreateUserRequest request);
+        Task<(CreateUserResult Result, UserResponseDto? User)> CreateUserAsync(CreateUserRequest request);
+        Task<ChangeUserRoleResult> ChangeUserRoleAsync(int id, ChangeUserRoleRequest request);
     }
 }
