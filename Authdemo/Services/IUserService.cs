@@ -12,8 +12,8 @@ namespace Authdemo.Services
         Task<DeleteUserResult> DeleteUserAsync(int id);
         Task<bool> DeactivateUserAsync(int id);
         Task<bool> ActivateUserAsync(int id);
-        //Task<UserResponseDto> CreateUserAsync(CreateUserRequest request);
         Task<(CreateUserResult Result, UserResponseDto? User)> CreateUserAsync(CreateUserRequest request);
         Task<ChangeUserRoleResult> ChangeUserRoleAsync(int id, ChangeUserRoleRequest request);
+        Task<string?> GetRoleNameByIdAsync(int roleId);
     }
 }

@@ -145,6 +145,9 @@ namespace Authdemo.Controllers
                 return Conflict($"Email: {request.Email} already exists.");
             }
 
+            if (result.Result == CreateUserResult.InvalidRole)
+                return BadRequest("Invalid or inactive role.");
+
             return Ok(result.User);
         }
 
@@ -163,7 +166,16 @@ namespace Authdemo.Controllers
                 return BadRequest($"User {id} Got Deleted, so cant change their Role");
             }
 
-            return Ok($"User {id} role changed to {request.Role} successfully.");
+            if (result == ChangeUserRoleResult.InvalidRole)
+            {
+                return BadRequest($"Role {request.RoleId} is invalid or inactive.");
+            }
+
+            // Testing purpose: Get the role name by ID and include it in the response message
+            var roleName = await _userService.GetRoleNameByIdAsync(request.RoleId);
+
+
+            return Ok($"User {id} role changed to {roleName} successfully.");
         }
     }
 }

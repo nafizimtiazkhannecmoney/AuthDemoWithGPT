@@ -1,6 +1,6 @@
 ﻿using Authdemo.Entities;
 
-namespace Authdemo.Services
+namespace Authdemo.Repositories
 {
     public interface IUserRepository
     {
