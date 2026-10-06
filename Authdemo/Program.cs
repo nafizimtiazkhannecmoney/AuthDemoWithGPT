@@ -4,6 +4,7 @@ using System.Text;
 using Authdemo.Data;
 using Authdemo.Entities;
 using Authdemo.Models;
+using Authdemo.Repositories;
 using Authdemo.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -87,6 +88,7 @@ namespace Authdemo
             builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
             builder.Services.AddScoped<IEmailService, MailtrapEmailService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
             // Add Authentication & Authorization
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -213,6 +215,7 @@ namespace Authdemo
 }
 
 
+
 // Test , This code was Implemented from Development
 
 // Nugets
@@ -244,7 +247,13 @@ namespace Authdemo
 // Update-Database
 
 
+// Add-Migration AddRbacTablesAndUserRole
+// Update-Database
 
+// Add-Migration SeedInitialRoles
+// Update-Database
+
+// Add-Migration PopulateUserRoleIds
 
 
 

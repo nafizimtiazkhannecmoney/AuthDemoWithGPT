@@ -2,7 +2,7 @@
 using Authdemo.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Authdemo.Services
+namespace Authdemo.Repositories
 {
     public class UserRepository : IUserRepository
     {
@@ -25,6 +25,7 @@ namespace Authdemo.Services
         public async Task<User?> GetByUsernameAsync(string username)
         {
             return await _context.Users
+                .Include(u => u.RoleNavigation)
                 .FirstOrDefaultAsync(x => 
                 x.Username == username && 
                 !x.IsDeleted &&
@@ -42,7 +43,9 @@ namespace Authdemo.Services
 
         public async Task<User?> GetByIdAsync(int id)
         {
-           return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+           return await _context.Users
+                .Include(u => u.RoleNavigation)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public Task UpdateAsync(User user)
@@ -78,6 +81,7 @@ namespace Authdemo.Services
         {
             return await _context.RefreshTokens
                 .Include(rt => rt.User)
+                .ThenInclude(u => u.RoleNavigation)
                 .FirstOrDefaultAsync(rt => rt.Token == token);
         }
 
@@ -122,7 +126,9 @@ namespace Authdemo.Services
         public async Task<List<User>> GetAllUsersAsync()
         {
             //return await _context.Users.Where(u => !u.IsDeleted).ToListAsync(); // Gets all Users Along with Deleted Ones.
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Include(u => u.RoleNavigation)
+                .ToListAsync();
         }
 
         public async Task RevokeAllRefreshTokensAsync(int userId)

@@ -4,6 +4,7 @@
     {
         Success,
         UsernameExists,
-        EmailExists
+        EmailExists,
+        InvalidRole
     }
 }

@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using Authdemo.Entities;
 using Authdemo.Models;
+using Authdemo.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -71,7 +72,7 @@ namespace Authdemo.Services
                 Success = true,
                 Message = "Login Successful",
                 Username = user.Username,
-                Role = user.Role,
+                Role = user.RoleNavigation!.Name,
                 Token = token,
                 ExpiresAt = jwt.ValidTo.ToLocalTime(),
                 ExpiresAtString = jwt.ValidTo.ToLocalTime().ToString("dd MMM yyyy, hh:mm:ss tt"),
@@ -253,7 +254,7 @@ namespace Authdemo.Services
                 Success = true,
                 Message = "Token refreshed successfully.",
                 Username = user.Username,
-                Role = user.Role,
+                Role = user.RoleNavigation!.Name,
                 Token = token,
                 ExpiresAt = jwt.ValidTo.ToLocalTime(),
                 ExpiresAtString = jwt.ValidTo.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt"),

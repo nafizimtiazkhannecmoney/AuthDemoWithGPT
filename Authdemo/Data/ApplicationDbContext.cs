@@ -36,7 +36,13 @@ namespace Authdemo.Data
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.RoleNavigation)
+                .WithMany(r => r.Users)
+                .HasForeignKey(u => u.RoleId)
+                .IsRequired(false);
+
+
             modelBuilder.Entity<RolePermission>()
             .HasKey(rp => new { rp.RoleId, rp.PermissionId });
 
@@ -49,6 +55,22 @@ namespace Authdemo.Data
                 .HasOne(rp => rp.Permission)
                 .WithMany(p => p.RolePermissions)
                 .HasForeignKey(rp => rp.PermissionId);
+
+            modelBuilder.Entity<Role>().HasData(
+            new Role
+            {
+                Id = 1,
+                Name = "Admin",
+                Description = "System administrator",
+                IsActive = true
+            },
+            new Role
+            {
+                Id = 2,
+                Name = "User",
+                Description = "Standard application user",
+                IsActive = true
+            });
 
             base.OnModelCreating(modelBuilder);
         }

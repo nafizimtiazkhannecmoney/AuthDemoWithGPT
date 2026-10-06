@@ -4,6 +4,7 @@
     {
         Success,
         NotFound,
-        Deleted
+        Deleted,
+        InvalidRole
     }
 }

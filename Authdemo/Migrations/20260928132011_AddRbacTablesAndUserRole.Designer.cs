@@ -4,6 +4,7 @@ using Authdemo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Authdemo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260928132011_AddRbacTablesAndUserRole")]
+    partial class AddRbacTablesAndUserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,22 +133,6 @@ namespace Authdemo.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "System administrator",
-                            IsActive = true,
-                            Name = "Admin"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Standard application user",
-                            IsActive = true,
-                            Name = "User"
-                        });
                 });
 
             modelBuilder.Entity("Authdemo.Entities.RolePermission", b =>
