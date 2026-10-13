@@ -10,10 +10,10 @@
 
         public string Email { get; set; } = string.Empty;
 
-        public string Role { get; set; } = string.Empty;
+        //public string Role { get; set; } = string.Empty;
 
         // Navigation property for Role
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
         public Role? RoleNavigation { get; set; }
 
         public bool IsActive { get; set; }

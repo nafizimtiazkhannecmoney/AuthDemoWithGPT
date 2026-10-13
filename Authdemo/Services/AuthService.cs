@@ -14,13 +14,15 @@ namespace Authdemo.Services
         private readonly PasswordHasher<User> _passwordHasher;
         private readonly IJwtService _jwtService;
         private readonly IEmailService _emailService;
+        private readonly IRoleRepository _roleRepository;
 
-        public AuthService(IUserRepository userRepository, PasswordHasher<User> passwordHasher, IJwtService jwtService, IEmailService emailService)
+        public AuthService(IUserRepository userRepository, PasswordHasher<User> passwordHasher, IJwtService jwtService, IEmailService emailService, IRoleRepository roleRepository)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
             _jwtService = jwtService;
             _emailService = emailService;
+            _roleRepository = roleRepository;
         }
 
         public async Task<LoginResponse> LoginAsync(LoginRequest request)
@@ -109,12 +111,13 @@ namespace Authdemo.Services
                     Message = "Email already exists."
                 };
             }
+            var role = await _roleRepository.GetActiveRoleByNameAsync("User");
 
             var user = new User
             {
                 Username = request.Username,
                 Email = request.Email,
-                Role = "User",
+                RoleId = role.Id,
                 IsActive = true,
                 Department = "Finance"
             };

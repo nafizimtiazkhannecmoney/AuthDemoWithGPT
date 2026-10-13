@@ -189,11 +189,7 @@ namespace Authdemo.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RoleId")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<int>("TokenVersion")
@@ -261,7 +257,9 @@ namespace Authdemo.Migrations
                 {
                     b.HasOne("Authdemo.Entities.Role", "RoleNavigation")
                         .WithMany("Users")
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("RoleNavigation");
                 });

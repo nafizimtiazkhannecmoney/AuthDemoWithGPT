@@ -18,5 +18,13 @@ namespace Authdemo.Repositories
                 r.Id == id && 
                 r.IsActive);
         }
+
+        public async Task<Role?> GetActiveRoleByNameAsync(string name)
+        {
+            return await _context.Roles
+                .FirstOrDefaultAsync(r =>
+                    r.Name == name &&
+                    r.IsActive);
+        }
     }
 }

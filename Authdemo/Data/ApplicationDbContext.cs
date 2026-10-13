@@ -40,7 +40,7 @@ namespace Authdemo.Data
                 .HasOne(u => u.RoleNavigation)
                 .WithMany(r => r.Users)
                 .HasForeignKey(u => u.RoleId)
-                .IsRequired(false);
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             modelBuilder.Entity<RolePermission>()

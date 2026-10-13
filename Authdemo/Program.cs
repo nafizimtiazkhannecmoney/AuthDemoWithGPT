@@ -154,6 +154,7 @@ namespace Authdemo
                                 return;
                             }
 
+
                             if (!user.IsActive)
                             {
                                 //context.Fail("User account is inactive.");
@@ -256,7 +257,26 @@ namespace Authdemo
 // Add-Migration PopulateUserRoleIds
 
 
+// Add-Migration MakeUserRoleRequired
+// Update-Database
 
+// Add-Migration RemoveLegacyUserRole
+// Update-Database
+
+
+//no, wht I mean was the main building blocks to understand other peoples or production level codes like functions, interfaces, or repository pattern ,
+//or list, like all the things or professional things that are used like special functions or enums or somehthing elase, list all of those things that are used in
+//professional level code bases in .net core, so that I can understand them and make changes to them and add new features to them,
+//so please make me a list of those things that are used in professional level code bases in .net core, so that I can understand them and make changes to them and
+//add new features to them, so please make me a list of those things that are used in professional level code bases in .net core, so that I can understand them and
+//make changes to them and add new features to them, so please make me a list of those things that are used in professional level code bases in .net core, so that I can
+//understand them and make changes to them and add new features to them, so please make me a list of those things that are used in professional level code bases in .net core,
+//so that I can understand them and make changes to them and add new features to them, so please make me a list of those things that are used in professional level code bases in .net core, so that I can understand them and make changes to them and add new features to them, so please make me a list of those things that are used in professional level code bases in .net core, so that I can understand them and make changes to them and add new features to them, so please make me a list of those things that are used in professional level code bases in .net core, so that I can understand them and make changes to them and add new features to them, so please make me a list of those things that are used in professional level code bases in .net core, so that I can understand them and make changes to them and add new features to them, so please make me a list of those things that are used in professional level code bases in .net core, so that I can understand them and make changes to them and add new features to them, so please make me a list of those things that are used in professional level code bases in .net core, so that I can understand them and make changes to them and add new features to them, so please make me a list of those things that are used in professional level code bases in .net core, so that I can understand them and make changes to them and add new features to them, so please make me a list of those things that are used in professional level code bases in .net core, so that I can understand 
+
+// ok now make me a list of things you need to teach me
+// to be a better pro dev so that wehn I see any code base in .net core I can understand it and make changes to it and add new features to it, but what happens for me 
+// is that I see a code base and I get lost in it and I don't know where to start, so I need to learn the fundamentals of .net core and how to read code bases and understand them and make changes to them and add new features to them, so please make me a list of things I need to learn to be a better pro dev in .net core
+// and whenever I see any code I can recognize easily.
 
 
 
