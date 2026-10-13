@@ -75,6 +75,36 @@ namespace Authdemo.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Permissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "View user information",
+                            IsActive = true,
+                            Name = "Users.View"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Create new users",
+                            IsActive = true,
+                            Name = "Users.Create"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Update user details",
+                            IsActive = true,
+                            Name = "Users.Update"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Soft-delete users",
+                            IsActive = true,
+                            Name = "Users.Delete"
+                        });
                 });
 
             modelBuilder.Entity("Authdemo.Entities.RefreshToken", b =>
@@ -161,6 +191,28 @@ namespace Authdemo.Migrations
                     b.HasIndex("PermissionId");
 
                     b.ToTable("RolePermissions");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 1
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 2
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 3
+                        },
+                        new
+                        {
+                            RoleId = 1,
+                            PermissionId = 4
+                        });
                 });
 
             modelBuilder.Entity("Authdemo.Entities.User", b =>

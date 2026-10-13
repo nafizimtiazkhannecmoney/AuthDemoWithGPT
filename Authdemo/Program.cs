@@ -263,6 +263,22 @@ namespace Authdemo
 // Add-Migration RemoveLegacyUserRole
 // Update-Database
 
+// Add-Migration SeedInitialPermissions
+// Update-Database
+
+// Add-Migration AssignInitialAdminPermissions
+// 
+
+
+
+
+
+
+
+
+
+
+
 
 //no, wht I mean was the main building blocks to understand other peoples or production level codes like functions, interfaces, or repository pattern ,
 //or list, like all the things or professional things that are used like special functions or enums or somehthing elase, list all of those things that are used in

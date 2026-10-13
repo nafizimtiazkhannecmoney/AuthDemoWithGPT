@@ -72,6 +72,58 @@ namespace Authdemo.Data
                 IsActive = true
             });
 
+            modelBuilder.Entity<Permission>().HasData(
+            new Permission
+            {
+                Id = 1,
+                Name = "Users.View",
+                Description = "View user information",
+                IsActive = true
+            },
+            new Permission
+            {
+                Id = 2,
+                Name = "Users.Create",
+                Description = "Create new users",
+                IsActive = true
+            },
+            new Permission
+            {
+                Id = 3,
+                Name = "Users.Update",
+                Description = "Update user details",
+                IsActive = true
+            },
+            new Permission
+            {
+                Id = 4,
+                Name = "Users.Delete",
+                Description = "Soft-delete users",
+                IsActive = true
+            });
+
+            modelBuilder.Entity<RolePermission>().HasData(
+            new RolePermission
+            {
+                RoleId = 1,
+                PermissionId = 1
+            },
+            new RolePermission
+            {
+                RoleId = 1,
+                PermissionId = 2
+            },
+            new RolePermission
+            {
+                RoleId = 1,
+                PermissionId = 3
+            },
+            new RolePermission
+            {
+                RoleId = 1,
+                PermissionId = 4
+            });
+
             base.OnModelCreating(modelBuilder);
         }
     }
